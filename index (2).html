@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department-wise Student List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        .stats-bar {
+            background: #ecf0f1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            border-bottom: 3px solid #3498db;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 15px 25px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+        }
+        .department-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid #ecf0f1;
+        }
+        .dept-header {
+            padding: 25px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.3em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dept-header.aiml {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+        .dept-header.csbs {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+        .dept-header.cse {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+        }
+        .dept-header.aids {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        }
+        .student-count-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .student-list {
+            padding: 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .student-item {
+            display: flex;
+            padding: 15px 25px;
+            border-bottom: 1px solid #ecf0f1;
+            transition: all 0.3s ease;
+        }
+        .student-item:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+        .student-item:last-child {
+            border-bottom: none;
+        }
+        .student-number {
+            font-weight: bold;
+            color: #95a5a6;
+            width: 80px;
+            flex-shrink: 0;
+        }
+        .student-reg {
+            font-family: 'Courier New', monospace;
+            color: #7f8c8d;
+            width: 150px;
+            flex-shrink: 0;
+            font-size: 0.9em;
+        }
+        .student-name {
+            font-weight: 600;
+            color: #2c3e50;
+            flex-grow: 1;
+        }
+        .download-section {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        .download-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
+        }
+        .scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .scrollbar::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 10px;
+        }
+        .scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1>STUDENT DIRECTORY</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.8;">Department-wise Classification</p>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">40</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Departments</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">12</div>
+                <div class="stat-label">CSBS Students</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- AI&DS Department -->
+            <div class="department-card">
+                <div class="dept-header aids">
+                    <span>AI&DS - Artificial Intelligence & Data Science</span>
+                    <span class="student-count-badge">9 Students</span>
+                </div>
+                <div class="student-list scrollbar">
+                    <div class="student-item"><div class="student-number">01</div><div class="student-reg">711523BAD011</div><div class="student-name">DHARANEESH S K</div></div>
+                    <div class="student-item"><div class="student-number">02</div><div class="student-reg">711523BAD017</div><div class="student-name">DINESH MADHAVAN M</div></div>
+                    <div class="student-item"><div class="student-number">03</div><div class="student-reg">711523BAD029</div><div class="student-name">LOGESH A</div></div>
+                    <div class="student-item"><div class="student-number">04</div><div class="student-reg">711523BAD036</div><div class="student-name">NIZAITH MOHAMMED M</div></div>
+                    <div class="student-item"><div class="student-number">05</div><div class="student-reg">711523BAD037</div><div class="student-name">PAWAN R</div></div>
+                    <div class="student-item"><div class="student-number">06</div><div class="student-reg">711523BAD047</div><div class="student-name">RUBAN SRIJITH A</div></div>
+                    <div class="student-item"><div class="student-number">07</div><div class="student-reg">711523BAD055</div><div class="student-name">STEEPAN P</div></div>
+                    <div class="student-item"><div class="student-number">08</div><div class="student-reg">711523BAD059</div><div class="student-name">VIJESH A</div></div>
+                    <div class="student-item"><div class="student-number">09</div><div class="student-reg">711523BAD063</div><div class="student-name">VISHWA D</div></div>
+                </div>
+            </div>
+
+            <!-- AIML Department -->
+            <div class="department-card">
+                <div class="dept-header aiml">
+                    <span>AIML - Artificial Intelligence & Machine Learning</span>
+                    <span class="student-count-badge">11 Students</span>
+                </div>
+                <div class="student-list scrollbar">
+                    <div class="student-item"><div class="student-number">01</div><div class="student-reg">711523BAM011</div><div class="student-name">DAVID VENSILN R</div></div>
+                    <div class="student-item"><div class="student-number">02</div><div class="student-reg">711523BAM013</div><div class="student-name">DHAANISH NIHAAL M</div></div>
+                    <div class="student-item"><div class="student-number">03</div><div class="student-reg">711523BAM014</div><div class="student-name">DHANYATHAA M</div></div>
+                    <div class="student-item"><div class="student-number">04</div><div class="student-reg">711523BAM023</div><div class="student-name">HARISHWAR R</div></div>
+                    <div class="student-item"><div class="student-number">05</div><div class="student-reg">711523BAM030</div><div class="student-name">MOHANRAJ S</div></div>
+                    <div class="student-item"><div class="student-number">06</div><div class="student-reg">711523BAM044</div><div class="student-name">SANJAIVEERAN S</div></div>
+                    <div class="student-item"><div class="student-number">07</div><div class="student-reg">711523BAM046</div><div class="student-name">SARIKAA SHREE V</div></div>
+                    <div class="student-item"><div class="student-number">08</div><div class="student-reg">711523BAM051</div><div class="student-name">SHANMUGAM A</div></div>
+                    <div class="student-item"><div class="student-number">09</div><div class="student-reg">711523BAM053</div><div class="student-name">SRIDHARAN I</div></div>
+                    <div class="student-item"><div class="student-number">10</div><div class="student-reg">711523BAM057</div><div class="student-name">VIJAY E</div></div>
+                    <div class="student-item"><div class="student-number">11</div><div class="student-reg">711523BAM063</div><div class="student-name">YUVANRAJ K S</div></div>
+                </div>
+            </div>
+
+            <!-- CSBS Department -->
+            <div class="department-card">
+                <div class="dept-header csbs">
+                    <span>CSBS - Computer Science & Business Systems</span>
+                    <span class="student-count-badge">12 Students</span>
+                </div>
+                <div class="student-list scrollbar">
+                    <div class="student-item"><div class="student-number">01</div><div class="student-reg">711523BCB005</div><div class="student-name">AHAMED AMMAR O A</div></div>
+                    <div class="student-item"><div class="student-number">02</div><div class="student-reg">711523BCB015</div><div class="student-name">DINESH S</div></div>
+                    <div class="student-item"><div class="student-number">03</div><div class="student-reg">711523BCB016</div><div class="student-name">DIVYA DHARSHINI M</div></div>
+                    <div class="student-item"><div class="student-number">04</div><div class="student-reg">711523BCB019</div><div class="student-name">GOWSIKA S A</div></div>
+                    <div class="student-item"><div class="student-number">05</div><div class="student-reg">711523BCB031</div><div class="student-name">LAKSHANA S</div></div>
+                    <div class="student-item"><div class="student-number">06</div><div class="student-reg">711523BCB041</div><div class="student-name">PRAKASH B</div></div>
+                    <div class="student-item"><div class="student-number">07</div><div class="student-reg">711523BCB045</div><div class="student-name">RAJADURAI R</div></div>
+                    <div class="student-item"><div class="student-number">08</div><div class="student-reg">711523BCB047</div><div class="student-name">ROBERT MITHRAN</div></div>
+                    <div class="student-item"><div class="student-number">09</div><div class="student-reg">711523BCB049</div><div class="student-name">SABARI YUHENDHRAN M</div></div>
+                    <div class="student-item"><div class="student-number">10</div><div class="student-reg">711523BCB054</div><div class="student-name">SHARVESH L</div></div>
+                    <div class="student-item"><div class="student-number">11</div><div class="student-reg">711523BCB055</div><div class="student-name">SOBHIKA P M</div></div>
+                    <div class="student-item"><div class="student-number">12</div><div class="student-reg">711523BCB056</div><div class="student-name">SOWMIYA S R</div></div>
+                </div>
+            </div>
+
+            <!-- CSE Department -->
+            <div class="department-card">
+                <div class="dept-header cse">
+                    <span>CSE - Computer Science & Engineering</span>
+                    <span class="student-count-badge">8 Students</span>
+                </div>
+                <div class="student-list scrollbar">
+                    <div class="student-item"><div class="student-number">01</div><div class="student-reg">711523BCS001</div><div class="student-name">AAKASH M</div></div>
+                    <div class="student-item"><div class="student-number">02</div><div class="student-reg">711523BCS003</div><div class="student-name">AATHISANKAR A</div></div>
+                    <div class="student-item"><div class="student-number">03</div><div class="student-reg">711523BAD008</div><div class="student-name">ALASSAN CORLEY A</div></div>
+                    <div class="student-item"><div class="student-number">04</div><div class="student-reg">711523BCS017</div><div class="student-name">DHILEEPAN T</div></div>
+                    <div class="student-item"><div class="student-number">05</div><div class="student-reg">711523BCS038</div><div class="student-name">PADMADEV D</div></div>
+                    <div class="student-item"><div class="student-number">06</div><div class="student-reg">711523BCS048</div><div class="student-name">SANTHOSH K V</div></div>
+                    <div class="student-item"><div class="student-number">07</div><div class="student-reg">711523BCS054</div><div class="student-name">SIBY R</div></div>
+                    <div class="student-item"><div class="student-number">08</div><div class="student-reg">711523BAD061</div><div class="student-name">VINOTHKUMAR M</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <button class="download-btn" onclick="captureImage()">📸 Save as Image</button>
+        </div>
+    </div>
+
+    <script>
+        function captureImage() {
+            // This would require html2canvas library for full functionality
+            // For now, we'll show an alert
+            alert('To save as image:\n1. Right-click on the page\n2. Select "Save as Image" or use browser\'s built-in screenshot feature\n3. Or use Ctrl+Shift+S for screenshot on most browsers');
+        }
+    </script>
+</body>
+</html>
